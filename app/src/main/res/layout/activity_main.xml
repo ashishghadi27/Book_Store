@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EBEFF8"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/search_details"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/backgrnd">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:visibility="invisible"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/back"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/back"
+            android:layout_toStartOf="@+id/recommend"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/search_bcg"
+            android:layout_centerVertical="true">
+
+            <EditText
+                android:id="@+id/search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:hint="Search"
+                android:layout_marginStart="12dp"
+                android:textColorHint="#b4b4b4"
+                android:textColor="#D5D6EE"
+                android:background="@drawable/search_bcg"
+                android:textSize="15sp"
+                android:ellipsize="start"
+                android:gravity="center_vertical"
+                android:padding="10dp" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/recommend"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="15dp"
+            android:padding="3dp"
+            android:src="@drawable/recommend" />
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/search_details"
+        android:id="@+id/recyclerView"
+        />
+
+
+
+</RelativeLayout>
