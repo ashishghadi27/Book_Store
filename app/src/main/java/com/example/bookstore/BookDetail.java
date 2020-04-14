@@ -121,16 +121,8 @@ public class BookDetail extends AppCompatActivity implements BookLoader {
     @Override
     public void loadCB(List<CBook> listBook) {
         list = listBook;
-        dataOperations.setRecommended(id, list.get(0).getBookId(),
-                list.get(0).getBookTitle(),
-                list.get(0).getBookAuthor(),
-                list.get(0).getBookType(),
-                list.get(0).getBookIndex(),
-                list.get(0).getBookImg(),
-                list.get(0).getBookSubject(),
-                list.get(0).getBookSummary(),
-                list.get(0).getBookPdf(),
-                list.get(0).getRating());
+        dataOperations.setRecommended(id,
+                list.get(0).getBookSubject());
         dataSetter();
     }
 

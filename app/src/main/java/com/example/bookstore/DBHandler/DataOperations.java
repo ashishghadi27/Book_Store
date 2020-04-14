@@ -2,6 +2,7 @@ package com.example.bookstore.DBHandler;
 
 
 import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -47,9 +48,8 @@ public class DataOperations {
 
     }
 
-    public void setRecommended(String key, String bookId, String bookName, String bookAuthor, String bookType, String bookIndex, String bookImg, String bookSubject, String bookSummary, String bookPdf, String rating){
-        CBook book = new CBook(bookId, bookName, bookAuthor, bookType, bookIndex, bookImg, bookSubject, bookSummary, bookPdf, rating);
-        mDatabase.child("users").child(userid).child("recommended").child(key).setValue(book);
+    public void setRecommended(String key,String bookSubject){
+        mDatabase.child("users").child(userid).child("recommended").child(bookSubject).setValue("1");
     }
 
 
@@ -57,14 +57,39 @@ public class DataOperations {
 
         final List<BookModel> list = new ArrayList<>();
         bookLoader.viewProgress();
+        DatabaseReference passDataRef;
+        final List<String> subjectList = new ArrayList<>();
+        final String[] subject = {""};
 
-        DatabaseReference passDataRef = mDatabase.child("users").child(userid).child("recommended").getRef();
+        passDataRef = mDatabase.child("users").child(userid).child("recommended").getRef();
+        passDataRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    subjectList.add(snapshot.getKey());
+                }
+
+                for(String sub: subjectList)
+                    subject[0] = subject[0] + sub + ", ";
+
+                Log.v("SUBJECT", subject[0] + " ddsd");
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        passDataRef = mDatabase.child("books").getRef();
         passDataRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    BookModel data = snapshot.getValue(BookModel.class);
+                    CBook data = snapshot.getValue(CBook.class);
                     assert data != null;
                     String bookId = snapshot.getKey();
                     String bookName = data.getBookTitle();
@@ -72,8 +97,17 @@ public class DataOperations {
                     String bookType = data.getBookType();
                     String bookIndex = data.getBookIndex();
                     String bookImg = data.getBookImg();
-                    BookModel book = new BookModel(bookId, bookName, bookAuthor, bookType, bookIndex, bookImg);
-                    list.add(book);
+                    if(subject[0].isEmpty()){
+                        if(!data.getRating().equals("nan") && Float.parseFloat(data.getRating()) == 5){
+                            BookModel book = new BookModel(bookId, bookName, bookAuthor, bookType, bookIndex, bookImg);
+                            list.add(book);
+                        }
+
+                    }
+                    else if(subject[0].contains(data.getBookSubject())){
+                        BookModel book = new BookModel(bookId, bookName, bookAuthor, bookType, bookIndex, bookImg);
+                        list.add(book);
+                    }
                 }
                 bookLoader.loadBooks(list);
             }
